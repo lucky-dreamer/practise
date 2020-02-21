@@ -2,14 +2,19 @@
 超星尔雅刷课程序，实现自动控制视频的播放停止，遍历播放
 作者：Lucky
 """
+import os
 import time
 from selenium.webdriver import ChromeOptions
 from selenium.webdriver import Chrome
 option = ChromeOptions().add_experimental_option("excludeSwitches", ["enable-automation"])
 driver = Chrome(executable_path=r"H:\chromedriver.exe", options=option)  # 初始设置
-def window_latest():# 进入最新的窗口（即提交后的）
+
+
+def window_latest():  # 进入最新的窗口（即提交后的）
     for handle in driver.window_handles:
         driver.switch_to.window(handle)
+
+
 def main():
     driver.maximize_window()
     driver.get('http://passport2.chaoxing.com/login?fid=2016&refer=http://i.mooc.chaoxing.com/space/index.shtml')#进入目标登录网页
@@ -20,7 +25,7 @@ def main():
     time.sleep(3)
     acc = driver.find_element_by_id("passwordId")
     acc.click()
-    acc.send_keys("mt1913252329")
+    acc.send_keys(os.environ.get('pw'))
     time.sleep(3)
     zcc = driver.find_element_by_xpath("//*[@id='numcode']")
     zcc.click()
@@ -74,7 +79,7 @@ def main():
             time.sleep(2)
             z.click()
             bbk = driver.find_element_by_xpath("//*[@id='video']/div[4]/button[1]/span[2]").text  # 判断视频是否终止
-            while bbk!="重播":
+            while bbk != "重播":
                 time.sleep(10)
                 bbk = driver.find_element_by_xpath("//*[@id='video']/div[4]/button[1]/span[2]").text  # 每十秒判断一次
             else:
@@ -103,5 +108,7 @@ def main():
                 nb.click()
                 time.sleep(3)
                 window_latest()
+
+
 if __name__ == "__main__":
     main()

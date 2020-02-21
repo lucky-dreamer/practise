@@ -48,6 +48,8 @@ def url_list(url_list1):
         url=based_url+urlencode(params)
         url_list1.append(url)
         id+=6
+
+
 # 页面获取
 def get_page(url):
     gf=requests.get(url,headers=list_x[random.randint(0,2)],timeout=100)  # proxies=proxies #  用多个cookie来爬取
@@ -56,6 +58,8 @@ def get_page(url):
     else:
         mn.append(url)
 # 解析提取自己需要的信息
+
+
 def prase_page(c):
         items = c.get('data')
         for item in items:
@@ -68,6 +72,7 @@ def prase_page(c):
                 dongtai['内容']=pq(item.get('content')).text()
                 yield dongtai   # yield作用，循环一次到这里的时候，跳出函数，返回一个值，并且记住返回值的位置                   # 下一次迭代再从这个位置后面开始，，好处是值不会覆盖，不会因为键相同而被重新赋值而吃掉
                                 # 先写进文件系统中，看看有没有什么问题，然后再写入数据库中
+
 
 def write_in_database(ghb):    # 写入数据库中
     q = pymysql.connect(host='localhost', user='root', password='', port=3306, db='db_mt')
@@ -83,6 +88,8 @@ def write_in_database(ghb):    # 写入数据库中
                 q.rollback()        # 如果插入失败则执行数据回滚，相当于什么也没发生
     q.commit()
     q.close()
+
+
 # 获取前十页的信息
 def main():
     url_list1 = []       # 空列表，用于日后存放构造好的url
@@ -97,6 +104,8 @@ def main():
                 write_in_database(ghb)  # 写入数据库
             continue
         url_list1 = mn     # 把没有爬取成功的列表放入待爬取区，循环往复
+
+
 if __name__ == '__main__':
     main()  # 算是成功了吧！^_^
 #  还可以添加一个数据去重！

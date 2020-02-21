@@ -7,8 +7,9 @@
 ！！分析方法：审查元素，然后复制能在审查元素上看到的元素，在源代码上搜索看能否搜到，如果能，就是普通静态页面，直接爬取”
 """
 import requests
+import os
 f=requests.session()  # 调用会话，待会儿登陆后可以在同一个会话基础上操作就好
-data={'name':'15648106113','password':'MT1913252329'}  # 设置登陆信息
+data={'name':'15648106113','password':os.environ.get('pw2')}  # 设置登陆信息
 headers={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 SE 2.X MetaSr 1.0'}
 login=f.post('https://accounts.douban.com/j/mobile/login/basic',headers=headers,data=data) # post提交表单登陆
 print(login.status_code)   # 查看是否登陆成功

@@ -8,9 +8,13 @@ from selenium.webdriver import ChromeOptions
 from selenium.webdriver import Chrome
 option = ChromeOptions().add_experimental_option("excludeSwitches", ["enable-automation"])
 driver = Chrome(executable_path=r"H:\chromedriver.exe", options=option)  # 初始设置
-def window_latest():# 进入最新的窗口（即提交后的）
+
+
+def window_latest():  # 进入最新的窗口（即提交后的）
     for handle in driver.window_handles:
         driver.switch_to.window(handle)
+
+
 def main():
     driver.maximize_window()
     driver.get('https://www.yojiang.cn/lesson/index')#进入目标登录网页
@@ -23,16 +27,16 @@ def main():
     zcc.click()
     time.sleep(2)
     window_latest()
-    sd=driver.find_element_by_xpath('//*[@id="rd-bought-list"]/div/div/div[2]/a')
+    sd = driver.find_element_by_xpath('//*[@id="rd-bought-list"]/div/div/div[2]/a')
     sd.click()
     window_latest()
     time.sleep(2)
-    mulu=driver.find_element_by_xpath('//*[@id="lesson_feature"]/div/div/div/div[4]/a')
+    mulu = driver.find_element_by_xpath('//*[@id="lesson_feature"]/div/div/div/div[4]/a')
     mulu.click()
     window_latest()
     time.sleep(2)
-    url_list=driver.find_elements_by_css_selector('#lesson_catalogue > ol > li > a')
-    p=54
+    url_list = driver.find_elements_by_css_selector('#lesson_catalogue > ol > li > a')
+    p = 54
     for i in url_list:
         hg=driver.find_elements_by_css_selector('#lesson_catalogue > ol > li > a')
         hg[p].click()
@@ -47,7 +51,9 @@ def main():
         while button =='Pause':
             time.sleep(10)
             button = driver.find_element_by_xpath('//*[@id="wk-video"]/div[5]/button[1]').get_attribute('title')
-        p+=1
+        p += 1
         continue
+
+
 if __name__ == "__main__":
     main()
