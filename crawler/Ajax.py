@@ -36,9 +36,11 @@ header2={'user-agent':'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:34.0) Gecko/201001
     'cookie':'_zap=be342da1-f5c7-42eb-97c4-ae7af231bcce; d_c0="ABBvHcNGrA-PTjJh9OC96uog6IPmkNQ5WEg=|1562039312"; _xsrf=S5GRIkp1YyypyGimKW7EEokRVOK29o0L; q_c1=a7e2c970ffb44c88b6a77806be9bb7db|1570372345000|1570372345000; __utma=51854390.461069542.1570372351.1570372351.1570372351.1; __utmz=51854390.1570372351.1.1.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/people/ha-ha-ha-pi-86/collections; __utmv=51854390.100--|2=registration_date=20180207=1^3=entry_date=20180207=1; capsion_ticket="2|1:0|10:1570433684|14:capsion_ticket|44:MTg4ZmQyMjA5NGZlNDRiOGEzZjJlMDI2MDQwNTQzODc=|c44cb9615c55b5500221f9d4594849937401d95431913ab737d8f61911a61654"; z_c0="2|1:0|10:1570433804|4:z_c0|92:Mi4xTXlpMEJ3QUFBQUFBRUc4ZHcwYXNEeVlBQUFCZ0FsVk5ERG1JWGdCVHN6WG5DY1RhUGZNZGJPSTROQW13RFFfYWp3|f03fb10ee9a87926db8c93d5d511f66b0b3a9f09b2513ace436583b8ea93b1f1"; tgw_l7_route=a37704a413efa26cf3f23813004f1a3b; tst=r; Hm_lvt_98beee57fd2ef70ccdd5ca52b9740c49=1571152624,1571241115,1571241777,1571756461; Hm_lpvt_98beee57fd2ef70ccdd5ca52b9740c49=1571756461'}
 list_x=[header0,header1,header2]  # 作为一个小的cookie池子，每次请求都随机换不同的cookie
 # 用多个cookie来爬取
+
+
 # 页面获取
 def get_page(page,id):
-    params={'session_token':'ad6c15368abf7824e3aa81f0e980acf5',  # cookie和session_token会变
+    params={'session_token':'ad6c15368abf7824e3aa81f董姐辛苦了0e980acf5',  # cookie和session_token会变
             'mobile':'true',
             'page_number':page,
             'limit':'6',
@@ -49,12 +51,16 @@ def get_page(page,id):
     gf=requests.get(url2,headers=list_x[random.randint(0,2)],timeout=100)# proxies=proxies,
     print(gf.status_code)
     return gf.json()
+
+
+# 列表生成式[x for x in range(4)]
+# 生成器表达式(x for x in range(4))
 # 解析提取自己需要的信息
 def prase_page(json):
     if json:
-        items=json.get('data')
+        items = json.get('data')
         for item in items:
-            item=item.get('target')
+            item = item.get('target')
             dongtai={}
             dongtai['点赞数'] = item.get('voteup_count')
             dongtai['问题']=item.get('question').get('title')
@@ -66,11 +72,11 @@ def prase_page(json):
 def write_in_database(ghb):
     q = pymysql.connect(host='localhost', user='root', password='', port=3306, db='db_mt')
     cursor = q.cursor()
-    for i in ghb:
-        print(i)
+    for i in ghb:   # for 相当于对生成器调用了n个next()
+        print(i)    # for 语句的原理，先把一个可迭代对象变成迭代器，再对它使用next语句，而生成器本身就是一个迭代器
         cursor.execute('create table if not exists tb_zhihu (点赞数 int(10),问题 varchar(100) primary key,内容 text(10000)) engine="InnoDB"')
-        x=str(i.values()).strip('dict_values([').strip('])').split(',')  # 字符串处理好麻烦，不过最终还是勉强实现了
-        if eval(x[0])>1000:
+        x = str(i.values()).strip('dict_values([').strip('])').split(',')  # 字符串处理好麻烦，不过最终还是勉强实现了
+        if eval(x[0]) > 1000:
             try:
                 cursor.execute('insert into tb_zhihu values(%s,%s,%s)',(x[0],x[1],x[2].replace('\\n','')))
             except:
@@ -79,12 +85,16 @@ def write_in_database(ghb):
     q.close()
     time.sleep(1)
 # 获取前十页的信息
+
+
 def main():
     for u in range(2,3):
         id = 5
         json=get_page(u,id) # 获取网页
         id += 6
         time.sleep(1)
-        ghb=prase_page(json)  # 解析网页
-        write_in_database(ghb)          # 写入数据库
+        ghb=prase_page(json)  # 解析网页   此操作启动生成器
+        write_in_database(ghb)          # 写入数据库 调用生成器
+
+
 main()      # 算是成功了吧！^_^

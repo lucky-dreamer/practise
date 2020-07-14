@@ -56,7 +56,7 @@ def get_page(url):
     if gf.status_code==200:
         return gf.json()
     else:
-        mn.append(url)
+        mn.append(url)   # 没返回成功则加入带爬取的列表
 # 解析提取自己需要的信息
 
 
@@ -75,7 +75,7 @@ def prase_page(c):
 
 
 def write_in_database(ghb):    # 写入数据库中
-    q = pymysql.connect(host='localhost', user='root', password='', port=3306, db='db_mt')
+    q = pymysql.connect(host='localhost', user='root', password='980412', port=3306, db='db_mt')
     cursor = q.cursor()
     cursor.execute('create table if not exists tb_zhihu (点赞数 int(10),问题 varchar(100) primary key,内容 text(10000)) engine="InnoDB"')
     for i in ghb:
