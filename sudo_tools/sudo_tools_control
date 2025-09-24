@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ $1 == "open" ];then
+	echo -e '#!/bin/bash\n"$1" "${@:2}"' > /home/mateng/my_scripts/sudo_tools
+elif [ $1 == "close"  ];then
+	rm /home/mateng/my_scripts/sudo_tools
+fi
