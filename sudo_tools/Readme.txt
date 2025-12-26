@@ -11,5 +11,5 @@
 
 监控：
 1.加审计： 在/etc/audit/rules.d/audit.rules里面加入：-w /usr/local/bin/sudome -p x -k suid_access(先为他添加标签)
-2.重启服务或者主机生效
-3.执行，并验证 ausearch -k suid_access -i 查看日志
+2.重启服务或者主机生效systemctl restart auditd或auditcl -R /etc/audit/rules.d/audit.rules,验证是否生效auditctl -l
+3.执行sudome，并验证 ausearch -k suid_access -i 查看日志
